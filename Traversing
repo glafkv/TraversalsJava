@@ -1,0 +1,190 @@
+import java.util.Scanner;
+class Trees {
+	
+	//Implementing tree node
+	 class Node {
+		int data;
+		Node left = null, right = null;
+		
+		Node(int data){
+			this.data = data;
+			
+		}
+	}
+	 Node root;
+	
+	 Trees(){
+		 root = null;
+	 }
+	//Function to insert nodes.
+	 private Node insertTree(int[] arr, Node root2, int i) {
+		 for(int key : arr) 
+			 root = insertRec(root,key);
+			 return root;
+	 }
+	//Function to print tree nodes in order.
+	public void inOrder(Node root) {
+		if(root != null) {
+			inOrder(root.left);
+			System.out.print(root.data + " ");
+			inOrder(root.right);
+		}
+	}
+	//Function to print nodes post order.
+	public void postOrder(Node root) {
+		if(root != null) {
+			postOrder(root.left);
+			postOrder(root.right);
+			System.out.print(root.data + " ");
+		}
+	}
+	//Function to print nodes pre order.
+	public void preOrder(Node root) {
+		if(root != null) {
+			System.out.print(root.data + " ");
+			preOrder(root.left);
+			preOrder(root.right);
+		}
+	}
+	//Searching for specific nodes.
+	public Node search(Node root,int key) {
+		//If key wasn't found, return message, if it was, return key."
+		if(root == null) {
+			System.out.print("Key was 9 not found.");
+			return null;
+		}
+		else if(root.data == key) {
+			System.out.print("Key: " + key);
+			return root;
+		}
+		System.out.print(root.data + " ");
+		if(root.data > key) {
+			//Print the data of which route it took.
+			System.out.println();
+			return search(root.left,key);
+		}
+		else {
+			//Print the data of which route it took.
+			return search(root.right,key);
+		}
+	}
+	//Insert and keep track of nodes.	
+	Node insertRec(Node root, int key) {
+		if(root == null) {
+			root = new Node(key);
+			return root;
+		}
+		if(key < root.data) {
+			root.left = insertRec(root.left,key);
+		} else if (key > root.data) {
+			root.right = insertRec(root.right,key);
+		}
+		return root;
+	}
+	//Calls deleteRec()
+	void delete(int key) {
+		root = deleteRec(root,key);
+	}
+	//Recursive function to delete key.
+	Node deleteRec(Node root, int key) {
+		//If tree is empty, return root.
+		if(root == null) {
+			return root;
+		}
+		if(key < root.data) {
+			root.left = deleteRec(root.left,key);
+		}
+		else if(key > root.data) {
+			root.right = deleteRec(root.right, key);
+		} 
+		//if the key is the same as root's key, delete it.
+		else {
+			if(root.left == null) {
+				return root.right;
+			} else if(root.right == null) {
+				return root.left;
+			}
+			root.data = minNum(root.right);
+			
+			root.right = deleteRec(root.right, root.data);
+		}
+		return root;
+	}
+	int minNum(Node root) {
+		int min = root.data;
+		while(root.left != null) {
+			min = root.left.data;
+			root = root.left;
+		}
+		return min;
+	}
+public static void main(String[] args) {
+		
+		//Calls trees class.
+		Trees tree = new Trees();
+		
+		//Array implementation.
+		int arr[] = {30,10,45,38,20,50,25,33,8,12};
+		//Call to the root.
+		tree.root = tree.insertTree(arr, tree.root, 0);
+		
+		Scanner input = new Scanner(System.in);
+		
+	while(true) {
+			//Menu options.
+			System.out.println();
+			System.out.println("Press 1 to print out traversals.");
+			System.out.println("Press 2 to find key 38.");
+			System.out.println("Press 3 to find a key 9.");
+			System.out.println("Press 4 to delete key 10.");
+			System.out.println("Press 0 to exit.");
+			System.out.println("Please make a selection.");
+			//Get user's input.
+			int choice = input.nextInt();
+		switch (choice) {
+		case 1:
+			//Printing all traversals. 
+			System.out.print("In order traversal: ");
+			tree.inOrder(tree.root);
+			System.out.println();
+				
+			System.out.print("Post order traversal: ");
+			tree.postOrder(tree.root);
+			System.out.println();
+			
+			System.out.print("Pre order traversal: ");
+			tree.preOrder(tree.root);
+			System.out.println();
+			
+			break;
+		case 2:
+			System.out.print("Route taken: ");
+			tree.search(tree.root, 38);
+			
+			break;
+		case 3:
+			System.out.print("Route taken: ");
+			System.out.println();
+			tree.search(tree.root, 9);
+			System.out.println();
+			break;
+		case 4:
+			tree.delete(10);
+			System.out.println("Key 10 was deleted!");
+			System.out.print("New in order traversal: ");
+			tree.inOrder(tree.root);
+			System.out.println();
+			System.out.print("New post order traversal: ");
+			tree.postOrder(tree.root);
+			System.out.println();
+			System.out.print("New pre order traversal: ");
+			tree.preOrder(tree.root);
+			break;
+		case 0:
+			return;
+			}	
+	
+		}	
+	}
+		
+}
